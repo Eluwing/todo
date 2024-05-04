@@ -1,14 +1,16 @@
+package com.example.todo.repository
+
 import com.example.todo.database.Todo
-import com.example.todo.database.TodoDataBase
+import com.example.todo.database.TodoDatabase
 import com.example.todo.repository.TodoReposeitory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
-class TodoReposeitoryImpl : TodoReposeitory {
-
-  @Autowired lateinit var todoDataBase: TodoDataBase
+class TodoRepositoryImpl(
+  val todoDatabase: TodoDatabase
+) : TodoReposeitory {
 
   override fun save(todo: Todo): Todo? {
     
@@ -24,11 +26,11 @@ class TodoReposeitoryImpl : TodoReposeitory {
     }?: kotlin.run{
       // insert
       todo.apply { 
-        this.index = ++todoDataBase.index
+        this.index = ++todoDatabase.index
         this.createdAt = LocalDateTime.now()
         this.updatedAt = LocalDateTime.now()
       }.run {
-        todoDataBase.todoList.add(todo)
+        todoDatabase.todoList.add(todo)
         this
       }
     }    
@@ -47,7 +49,7 @@ class TodoReposeitoryImpl : TodoReposeitory {
 
   override fun delete(index: Int): Boolean {
     return findOne(index)?.let{
-      todoDataBase.todoList.remove(it)
+      todoDatabase.todoList.remove(it)
       true
     }?:kotlin.run {
       false
@@ -55,10 +57,10 @@ class TodoReposeitoryImpl : TodoReposeitory {
   }
 
   override fun findOne(index: Int): Todo? {
-    return todoDataBase.todoList.filter { it.index == index }.first()
+    return todoDatabase.todoList.filter { it.index == index }.first()
   }
 
   override fun findAll(): MutableList<Todo> {
-    return todoDataBase.todoList
+    return todoDatabase.todoList
   }
 }

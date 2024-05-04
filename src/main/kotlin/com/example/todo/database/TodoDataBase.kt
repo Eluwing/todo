@@ -1,8 +1,6 @@
 package com.example.todo.database
 
-import kotlin.collections.mutableListOf
-
-data class TodoDataBase(
+data class TodoDatabase(
   var index: Int=0,
   var todoList: MutableList<Todo> = mutableListOf()
 ){

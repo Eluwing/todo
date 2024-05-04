@@ -10,19 +10,19 @@ import org.springframework.test.context.junit.jupiter.SpringExtension
 import kotlin.collections.mutableListOf
 import com.example.todo.database.Todo
 import java.time.LocalDateTime
-import TodoReposeitoryImpl
-import AppConfig
+import com.example.todo.repository.TodoRepositoryImpl
+import com.example.todo.config.AppConfig
 
 @ExtendWith(SpringExtension::class)
-@SpringBootTest(classes = [TodoReposeitoryImpl::class, AppConfig::class])
+@SpringBootTest(classes = [TodoRepositoryImpl::class, AppConfig::class])
 class TodoReposeitoryTest{
 
   @Autowired
-  lateinit var TodoReposeitoryImpl: TodoReposeitoryImpl
+  lateinit var todoRepositoryImpl: TodoRepositoryImpl
 
   @BeforeEach
   fun before(){
-    TodoReposeitoryImpl.todoDataBase.init()
+    todoRepositoryImpl.todoDatabase.init()
   }
 
   @Test
@@ -32,7 +32,7 @@ class TodoReposeitoryTest{
       this.description = "테스트"
       this.schedule = LocalDateTime.now()
     }
-    val result = TodoReposeitoryImpl.save(todo)
+    val result = todoRepositoryImpl.save(todo)
 
     Assertions.assertEquals(1,result?.index)
     Assertions.assertNotNull(result?.createdAt)
@@ -61,7 +61,7 @@ class TodoReposeitoryTest{
       }
     )
 
-    val result = TodoReposeitoryImpl.saveAll(todoList)
+    val result = todoRepositoryImpl.saveAll(todoList)
   
     Assertions.assertEquals(true,result)
   }
@@ -85,9 +85,9 @@ class TodoReposeitoryTest{
         this.schedule = LocalDateTime.now()
       }
     )
-    TodoReposeitoryImpl.saveAll(todoList)
+    todoRepositoryImpl.saveAll(todoList)
 
-    val result = TodoReposeitoryImpl.findOne(2)
+    val result = todoRepositoryImpl.findOne(2)
     
     Assertions.assertNotNull(result)
     Assertions.assertEquals("테스트 일정2",result?.title)
@@ -100,7 +100,7 @@ class TodoReposeitoryTest{
       this.description = "테스트"
       this.schedule = LocalDateTime.now()
     }
-    val insertTodo = TodoReposeitoryImpl.save(todo)
+    val insertTodo = todoRepositoryImpl.save(todo)
 
     val newTodo = Todo().apply {
       this.index = insertTodo?.index
@@ -109,7 +109,7 @@ class TodoReposeitoryTest{
       this.schedule = LocalDateTime.now()
     }
 
-    val result = TodoReposeitoryImpl.save(newTodo)
+    val result = todoRepositoryImpl.save(newTodo)
     
     Assertions.assertNotNull(result)
     Assertions.assertEquals(insertTodo?.index, result?.index)

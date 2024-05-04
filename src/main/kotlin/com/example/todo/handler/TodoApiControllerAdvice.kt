@@ -26,7 +26,7 @@ class TodoApiControllerAdvice{
         errors.add(this)
       }
     }
-    val ErrorResponse = ErrorResponse().apply{
+    val errorResponse = ErrorResponse().apply{
       this.resultCode = "FAIL"
       this.httpStatus = HttpStatus.BAD_REQUEST.value().toString()
       this.httpMethod = request.method
@@ -36,6 +36,6 @@ class TodoApiControllerAdvice{
       this.errors = errors
     }
     
-    return ResponseEntity.badRequest().body(ErrorResponse)
+    return ResponseEntity.badRequest().body(errorResponse)
   }
 }

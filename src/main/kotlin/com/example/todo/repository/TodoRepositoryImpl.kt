@@ -56,8 +56,9 @@ class TodoRepositoryImpl(
     }
   }
 
+  // index가 없을 때, 테스트 코드 작성 필요
   override fun findOne(index: Int): Todo? {
-    return todoDatabase.todoList.filter { it.index == index }.first()
+    return todoDatabase.todoList.first { it.index == index }
   }
 
   override fun findAll(): MutableList<Todo> {

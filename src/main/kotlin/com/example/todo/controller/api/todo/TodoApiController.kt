@@ -29,28 +29,36 @@ class TodoApiController(
     }?.let{
       ResponseEntity.ok(it)
     }?: kotlin.run{
-      return ResponseEntity.status(HttpStatus.MOVED_PERMANENTLY).header(HttpHeaders.LOCATION, "/api/todo/all").build()
+      return ResponseEntity
+        .status(HttpStatus.MOVED_PERMANENTLY)
+        .header(HttpHeaders.LOCATION, "/api/todo/all").build()
     }
     
   }
 
-  // @GetMapping(path = ["/all"])
-  // fun readAll():MutableList<TodoDto>{
-  //   return todoService.readAll()
-  // }
+  @GetMapping(path = ["/all"])
+  fun readAll():MutableList<TodoDto>{
+    return todoService.readAll()
+  }
 
-  // @PostMapping(path = [""])
-  // fun create(@Valid @RequestBody todoDto: TodoDto){
+  @PostMapping(path = [""])
+  fun create(@Valid @RequestBody todoDto: TodoDto): TodoDto?{
+    return todoService.create(todoDto)
+  }
 
-  // }
+  // create = 201, update = 200을 반환하도록 수정
+  @PutMapping(path = [""])
+  fun update(@Valid @RequestBody todoDto: TodoDto): TodoDto?{
+    return todoService.create(todoDto)
+  }
 
-  // @PutMapping(path = [""])
-  // fun update(@Valid @RequestBody todoDto: TodoDto){
-
-  // }
-
-  // @DeleteMapping(path = ["/{index}"])
-  // fun delete(@PathVariable(name = "index") _index: Int){
-
-  // }
+  @DeleteMapping(path = ["/{index}"])
+  fun delete(@PathVariable(name = "index") _index: Int): ResponseEntity<Any>{
+    
+    if(!todoService.delete(_index)){
+      return ResponseEntity.status(500).build()
+    }
+    
+    return ResponseEntity.ok().build()
+  }
 }
